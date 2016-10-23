@@ -3,11 +3,12 @@ package th.in.droid.popularmovies.app.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -28,18 +29,17 @@ public class MainFragment extends Fragment {
 
     private static final String LOG_TAG = MainFragment.class.getSimpleName();
 
-    private MovieService movieService;
-
-    private GridView moviesGrid;
-
-    private MovieAdapter movieAdapter;
+    private MovieService mMovieService;
+    private RecyclerView mMoviesGrid;
+    private MovieAdapter mMovieAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public MainFragment() {
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        movieAdapter = new MovieAdapter(null);
+        mMovieAdapter = new MovieAdapter();
 
         super.onCreate(savedInstanceState);
 
@@ -59,7 +59,7 @@ public class MainFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
-        movieService = retrofit.create(MovieService.class);
+        mMovieService = retrofit.create(MovieService.class);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MainFragment extends Fragment {
     }
 
     private void fetchMovies() {
-        movieService.getTopRatedMovies("top_rated")
+        mMovieService.getTopRatedMovies("top_rated")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MovieData>() {
@@ -85,8 +85,8 @@ public class MainFragment extends Fragment {
 
                     @Override
                     public void onNext(MovieData movieData) {
-                        movieAdapter.setMovieData(movieData);
-                        movieAdapter.notifyDataSetChanged();
+                        mMovieAdapter.setMovieData(movieData);
+                        mMovieAdapter.notifyDataSetChanged();
                     }
                 });
     }
@@ -95,8 +95,14 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        moviesGrid = (GridView) rootView.findViewById(R.id.movies_grid);
-        moviesGrid.setAdapter(movieAdapter);
+
+        mMoviesGrid = (RecyclerView) rootView.findViewById(R.id.movies_grid);
+        mMoviesGrid.setAdapter(mMovieAdapter);
+
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mMoviesGrid.setHasFixedSize(true);
+        mMoviesGrid.setLayoutManager(mLayoutManager);
+
         fetchMovies();
         return rootView;
     }
