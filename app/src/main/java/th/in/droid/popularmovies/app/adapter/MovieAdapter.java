@@ -33,6 +33,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         final Movie currentItem = mMovieData.getMovies().get(position);
         Glide.with(mContext)
                 .load(currentItem.getPosterPath())
+                .fitCenter()
                 .into(holder.poster);
     }
 
