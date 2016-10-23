@@ -32,7 +32,6 @@ public class MainFragment extends Fragment {
     private MovieService mMovieService;
     private RecyclerView mMoviesGrid;
     private MovieAdapter mMovieAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     public MainFragment() {
     }
@@ -98,10 +97,7 @@ public class MainFragment extends Fragment {
 
         mMoviesGrid = (RecyclerView) rootView.findViewById(R.id.movies_grid);
         mMoviesGrid.setAdapter(mMovieAdapter);
-
-        mLayoutManager = new GridLayoutManager(getActivity(), 2);
         mMoviesGrid.setHasFixedSize(true);
-        mMoviesGrid.setLayoutManager(mLayoutManager);
 
         fetchMovies();
         return rootView;
