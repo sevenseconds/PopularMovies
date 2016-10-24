@@ -12,7 +12,7 @@ public interface MovieService {
     String POSTER_PATH = "http://image.tmdb.org/t/p/w185";
 
     @GET("movie/{displayType}")
-    Observable<MovieData> getTopRatedMovies(@Path("displayType") String displayType);
+    Observable<MovieData> getMoviesByDisplayType(@Path("displayType") String displayType);
 
     @GET("movie/{movieId}/videos")
     Observable<VideoData> getTrailers(@Path("movieId") String movieId);

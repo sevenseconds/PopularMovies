@@ -46,7 +46,7 @@ public class MovieDetailFragment extends Fragment {
             mOverview.setText(mMovie.getOverview());
             Glide.with(this)
                     .load(mMovie.getPosterPath())
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.placeholder)
                     .fitCenter()
                     .into(mPoster);
         }

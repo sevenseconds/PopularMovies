@@ -39,18 +39,18 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/movie_poster"
-                tools:src="@mipmap/ic_launcher" />
+                tools:src="@drawable/placeholder" />
 
             <TextView
                 android:id="@+id/movie_release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/movie_poster"
-                android:layout_marginLeft="23dp"
-                android:layout_marginStart="23dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_toEndOf="@+id/movie_poster"
                 android:layout_toRightOf="@+id/movie_poster"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -64,7 +64,7 @@
                 android:layout_alignStart="@+id/movie_release_date"
                 android:layout_below="@+id/movie_release_date"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="120min" />
+                tools:text="120 mins" />
 
             <TextView
                 android:id="@+id/movie_rating"

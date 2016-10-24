@@ -1,7 +1,9 @@
 package th.in.droid.popularmovies.app.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -34,15 +36,17 @@ public class MainFragment extends Fragment {
     private MovieService mMovieService;
     private RecyclerView mMoviesGrid;
     private MovieAdapter mMovieAdapter;
+    private SharedPreferences mSharedPrefs;
+    private String mDisplayType;
 
     public MainFragment() {
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mMovieAdapter = new MovieAdapter();
-
         super.onCreate(savedInstanceState);
+
+        mMovieAdapter = new MovieAdapter();
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -60,40 +64,16 @@ public class MainFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
+
         mMovieService = retrofit.create(MovieService.class);
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mDisplayType = getDisplayTypeValue();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         fetchMovies();
-    }
-
-    private void fetchMovies() {
-        if (mMovieAdapter.getItemCount() > 0) {
-            return;
-        }
-
-        mMovieService.getTopRatedMovies("top_rated")
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MovieData>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Connection error: " + e.getMessage(), e);
-                    }
-
-                    @Override
-                    public void onNext(MovieData movieData) {
-                        mMovieAdapter.setMovieData(movieData);
-                        mMovieAdapter.notifyDataSetChanged();
-                    }
-                });
     }
 
     @Nullable
@@ -112,7 +92,8 @@ public class MainFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Movie>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -128,5 +109,39 @@ public class MainFragment extends Fragment {
                 });
 
         return rootView;
+    }
+
+    private void fetchMovies() {
+        if (mMovieAdapter.getItemCount() > 0 && mDisplayType.equals(getDisplayTypeValue())) {
+            return;
+        }
+
+        mMovieService.getMoviesByDisplayType(getDisplayTypeValue())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MovieData>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Connection error: " + e.getMessage(), e);
+                    }
+
+                    @Override
+                    public void onNext(MovieData movieData) {
+                        mMovieAdapter.setMovieData(movieData);
+                        mMovieAdapter.notifyDataSetChanged();
+                        mDisplayType = getDisplayTypeValue();
+                    }
+                });
+    }
+
+    private String getDisplayTypeValue() {
+        return mSharedPrefs.getString(
+                getString(R.string.pref_display_type_key),
+                getString(R.string.pref_display_type_popular));
     }
 }

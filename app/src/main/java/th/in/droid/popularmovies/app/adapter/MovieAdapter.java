@@ -46,6 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Glide.with(mContext)
                 .load(currentItem.getPosterPath())
                 .fitCenter()
+                .placeholder(R.drawable.placeholder)
                 .into(holder.poster);
     }
 
@@ -66,7 +67,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public long getItemId(int position) {
-        return super.getItemId(position);
+        return position;
     }
 
     public Observable<Movie> getMovieClickedPosition() {
