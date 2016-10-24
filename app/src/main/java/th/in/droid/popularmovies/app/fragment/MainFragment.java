@@ -1,9 +1,9 @@
 package th.in.droid.popularmovies.app.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +19,10 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import th.in.droid.popularmovies.app.R;
+import th.in.droid.popularmovies.app.activity.MovieDetailActivity;
 import th.in.droid.popularmovies.app.adapter.MovieAdapter;
 import th.in.droid.popularmovies.app.interceptor.ApiKeyInterceptor;
+import th.in.droid.popularmovies.app.model.Movie;
 import th.in.droid.popularmovies.app.model.MovieData;
 import th.in.droid.popularmovies.app.service.MovieService;
 
@@ -68,6 +70,10 @@ public class MainFragment extends Fragment {
     }
 
     private void fetchMovies() {
+        if (mMovieAdapter.getItemCount() > 0) {
+            return;
+        }
+
         mMovieService.getTopRatedMovies("top_rated")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -100,6 +106,27 @@ public class MainFragment extends Fragment {
         mMoviesGrid.setHasFixedSize(true);
 
         fetchMovies();
+
+        mMovieAdapter.getMovieClickedPosition()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Movie>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error click event: " + e.getMessage(), e);
+                    }
+
+                    @Override
+                    public void onNext(Movie movie) {
+                        Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
+                        intent.putExtra(Movie.MOVIE, movie);
+                        startActivity(intent);
+                    }
+                });
+
         return rootView;
     }
 }

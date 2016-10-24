@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import rx.Observable;
+import rx.subjects.PublishSubject;
 import th.in.droid.popularmovies.app.R;
 import th.in.droid.popularmovies.app.model.Movie;
 import th.in.droid.popularmovies.app.model.MovieData;
@@ -18,6 +20,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private Context mContext;
     private MovieData mMovieData;
+
+    private final PublishSubject<Movie> onClickSubject = PublishSubject.create();
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -31,6 +35,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Movie currentItem = mMovieData.getMovies().get(position);
+
+        holder.poster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSubject.onNext(currentItem);
+            }
+        });
+
         Glide.with(mContext)
                 .load(currentItem.getPosterPath())
                 .fitCenter()
@@ -55,6 +67,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public long getItemId(int position) {
         return super.getItemId(position);
+    }
+
+    public Observable<Movie> getMovieClickedPosition() {
+        return onClickSubject.asObservable();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

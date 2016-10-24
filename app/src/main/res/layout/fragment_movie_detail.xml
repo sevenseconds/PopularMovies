@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="?attr/colorAccent">
+
+            <TextView
+                android:id="@+id/movie_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@android:color/white"
+                tools:text="Titanic" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="13dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/movie_poster"
+                tools:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/movie_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/movie_poster"
+                android:layout_marginLeft="23dp"
+                android:layout_marginStart="23dp"
+                android:layout_toEndOf="@+id/movie_poster"
+                android:layout_toRightOf="@+id/movie_poster"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                tools:text="2015" />
+
+            <TextView
+                android:id="@+id/movie_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/movie_release_date"
+                android:layout_alignStart="@+id/movie_release_date"
+                android:layout_below="@+id/movie_release_date"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="120min" />
+
+            <TextView
+                android:id="@+id/movie_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/movie_duration"
+                android:layout_alignStart="@+id/movie_duration"
+                android:layout_below="@+id/movie_duration"
+                tools:text="8.1 / 10" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/movie_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            tools:text="Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.Overview" />
+
+    </LinearLayout>
+</ScrollView>
